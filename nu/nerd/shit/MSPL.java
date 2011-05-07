@@ -31,14 +31,17 @@ class MSPL extends PlayerListener {
             Player player = event.getPlayer();
             EntityPlayer ep = ((CraftPlayer) player).getHandle();
             String swap = player.getName();
-            ep.name = "&"+player.getDisplayName();
+            ep.name = "~"+player.getDisplayName();
             Thread c = new Thread(new CThread (swap, ep));
             c.start();
         }
     }
     
     public void onPlayerDropItem (PlayerDropItemEvent event) {
-        event.setCancelled(ModMode.mods.containsKey(event.getPlayer().getDisplayName()));
+        if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("You cannot drop items while in mod mode.");
+        }
     }
 
     private class CThread implements Runnable {
@@ -52,7 +55,7 @@ class MSPL extends PlayerListener {
         @Override
         public void run() {
             try {
-                Thread.sleep(50);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(MSPL.class.getName()).log(Level.SEVERE, null, ex);
             }

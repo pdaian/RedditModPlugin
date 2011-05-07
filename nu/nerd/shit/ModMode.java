@@ -4,6 +4,7 @@ import java.util.HashMap;
 import net.minecraft.server.EntityHuman;
 import net.minecraft.server.EntityPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -67,6 +68,7 @@ public class ModMode extends JavaPlugin
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Normal, this);
                 pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
                 pm.registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.High, this);
+                pm.registerEvent(Event.Type.PLAYER_DROP_ITEM, playerListener, Priority.Low, this);
 
 	}   
 
@@ -83,6 +85,10 @@ public class ModMode extends JavaPlugin
             }
             if (command.getName().equalsIgnoreCase("modmode") && args[0].equalsIgnoreCase("on")) {
                 Player player = (Player) sender;
+                if (mods.containsKey(player.getDisplayName())) {
+                    player.sendMessage("Already in mod mode.");
+                    return false;
+                }
                 EntityPlayer ep = ((CraftPlayer) player).getHandle();
                 ModMode.mods.put(((Player) sender).getDisplayName(), true);
                 storeShit.put(player.getDisplayName(), new DataStorage(player.getInventory().getContents(), player.getLocation()));
@@ -91,11 +97,18 @@ public class ModMode extends JavaPlugin
                     newname = newname.substring(0, 11);
                 }
                 ep.name = ChatColor.GREEN+newname+ChatColor.WHITE;
+                player.getInventory().clear();
+                player.teleport(new Location(player.getWorld(),0.0,2000.0,0.0));
+                player.performCommand("warp modcave");
                 player.sendMessage(ChatColor.RED+"You are now in mod mode.");
                 return true;
             }
             if (command.getName().equalsIgnoreCase("modmode") && args[0].equalsIgnoreCase("off")) {
                 Player player = (Player) sender;
+                if (!mods.containsKey(player.getDisplayName())) {
+                    player.sendMessage("Not in mod mode.");
+                    return false;
+                }
                 EntityPlayer ep = ((CraftPlayer) player).getHandle();
                 ModMode.mods.remove(((Player) sender).getDisplayName());
                 ep.name= player.getDisplayName();

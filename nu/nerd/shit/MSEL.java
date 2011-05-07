@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
-/**
+/**     
  *
  * @author kingnerd
  */
@@ -35,5 +35,7 @@ class MSEL extends EntityListener {
                 }
             }
         }
+        else if (event.getEntity() instanceof Player && ModMode.mods.containsKey(((Player) event.getEntity()).getDisplayName()))
+            event.setCancelled(true);
     }
 }
