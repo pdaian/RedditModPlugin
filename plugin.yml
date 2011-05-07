@@ -1,0 +1,11 @@
+name: ModMode
+version: 0.1
+author: FuckMyCockInTheAsshole
+website: http://www.nerd.nu/
+main: nu.nerd.shit.ModMode
+description: Merda
+commands:
+  modmode:
+    description: 'Enter mod mode and do other shit.'
+    usage: 'Usage: /<command>'
+    aliases: []
