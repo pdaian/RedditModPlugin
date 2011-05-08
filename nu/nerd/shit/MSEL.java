@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nu.nerd.shit;
 
 import org.bukkit.entity.Player;
@@ -9,10 +5,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 
-/**     
- *
- * @author kingnerd
- */
 class MSEL extends EntityListener {
 
     @Override

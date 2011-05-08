@@ -7,5 +7,5 @@ description: Merda
 commands:
   modmode:
     description: 'Enter mod mode and do other shit.'
-    usage: 'Usage: /<command>'
+    usage: 'Usage: /<command> [on|off]'
     aliases: []

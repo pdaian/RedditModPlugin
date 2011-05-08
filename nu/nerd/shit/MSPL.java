@@ -14,17 +14,27 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 
-/**
- *
- * @author kingnerd
- */
+
 class MSPL extends PlayerListener {
+    private ModMode modMode;
+
+    public MSPL (ModMode modMode) {
+        this.modMode=modMode;
+    }
     @Override
     public void onPlayerQuit (PlayerEvent event) {
-        if (ModMode.mods.containsKey(event.getPlayer().getName()))
-            ModMode.mods.remove(event.getPlayer().getDisplayName());
+        if (ModMode.mods.containsKey(event.getPlayer().getName())){}
+//            ModMode.mods.remove(event.getPlayer().getDisplayName());
     }
     
+    @Override
+    public void onPlayerJoin(PlayerEvent event) {
+        if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) { // Points to an unclean shutdown
+            ModMode.mods.remove(event.getPlayer().getDisplayName());
+            modMode.restoreShit(event.getPlayer());
+        }
+    }
+     
     @Override
     public void onPlayerCommandPreprocess (PlayerCommandPreprocessEvent event) {
         if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) {
@@ -37,6 +47,7 @@ class MSPL extends PlayerListener {
         }
     }
     
+    @Override
     public void onPlayerDropItem (PlayerDropItemEvent event) {
         if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) {
             event.setCancelled(true);
