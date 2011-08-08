@@ -32,7 +32,6 @@ public class ModMode extends JavaPlugin {
     private MSEL entityListener;
     private final HashMap<Player, Boolean> debugees = new HashMap<Player, Boolean>();
     public static HashMap<String, Boolean> mods = new HashMap<String, Boolean>();
-    private HashMap<String, DataStorage> storeShit = new HashMap<String, DataStorage>();
     public static PermissionHandler permissionHandler;
 
     public boolean isDebugging(final Player player) {
@@ -96,7 +95,6 @@ public class ModMode extends JavaPlugin {
             player.saveData();
             EntityPlayer ep = ((CraftPlayer) player).getHandle();
             ModMode.mods.put(((Player) sender).getDisplayName(), true);
-            storeShit.put(player.getDisplayName(), new DataStorage(player.getInventory().getContents(), player.getLocation(), player.getDisplayName()));
             String newname = player.getDisplayName().length() > 11 ? player.getDisplayName().substring(0, 11) : player.getDisplayName();
             ep.name = ChatColor.GREEN + newname + ChatColor.WHITE;
             player.getInventory().clear();
@@ -113,11 +111,6 @@ public class ModMode extends JavaPlugin {
                 return false;
             }
             ModMode.mods.remove(((Player) sender).getDisplayName());
-            DataStorage stuff = storeShit.get(player.getDisplayName());
-            player.teleport(stuff.getLocation());
-            player.getInventory().setContents(stuff.getInventory());
-            ep.name = stuff.getInitialName();
-            storeShit.remove(player.getDisplayName());
             player.kickPlayer(ChatColor.RED + "You are no longer in mod mode.");
             save();
             return true;
@@ -136,16 +129,6 @@ public class ModMode extends JavaPlugin {
         }
     }
 
-    public void restoreShit(Player player) {
-        if (this.storeShit.containsKey(player.getDisplayName())) {
-            DataStorage stuff = storeShit.get(player.getDisplayName());
-            player.teleport(stuff.getLocation());
-            player.getInventory().setContents(stuff.getInventory());
-            storeShit.remove(player.getDisplayName());
-            save();
-        }
-    }
-
     // Shamelessly stolen from Vanish plugin.
     public double getDistance(Player player1, Player player2) {
         Location loc1 = player1.getLocation();
@@ -159,10 +142,6 @@ public class ModMode extends JavaPlugin {
             ObjectOutputStream oos = new ObjectOutputStream(fout);
             oos.writeObject(ModMode.mods);
             oos.close();
-            FileOutputStream fout2 = new FileOutputStream("ModModeShit.dat");
-            ObjectOutputStream oos2 = new ObjectOutputStream(fout2);
-            oos2.writeObject(this.storeShit);
-            oos2.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,13 +154,6 @@ public class ModMode extends JavaPlugin {
             HashMap<String, Boolean> saver = (HashMap<String, Boolean>) ois.readObject();
             ModMode.mods = saver;
             ois.close();
-            
-            FileInputStream fin2 = new FileInputStream("ModModeShit.dat");
-            ObjectInputStream ois2 = new ObjectInputStream(fin2);
-            HashMap<String, DataStorage> saver2 = (HashMap<String, DataStorage>) ois2.readObject();
-            this.storeShit = saver2;
-            ois.close();            
-            
         } catch (Exception e) {
             e.printStackTrace();
         }

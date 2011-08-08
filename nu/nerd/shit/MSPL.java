@@ -27,7 +27,6 @@ class MSPL extends PlayerListener {
     public void onPlayerQuit (PlayerQuitEvent event) {
         if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) {
             ModMode.mods.remove(event.getPlayer().getDisplayName());
-            modMode.restoreShit(event.getPlayer());
         }
     }
     
@@ -35,7 +34,6 @@ class MSPL extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) { // Points to an unclean shutdown
             ModMode.mods.remove(event.getPlayer().getDisplayName());
-            modMode.restoreShit(event.getPlayer());
         }
     }
      
