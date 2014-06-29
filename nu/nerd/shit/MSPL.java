@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerListener;
 
 
@@ -22,16 +24,16 @@ class MSPL extends PlayerListener {
         this.modMode=modMode;
     }
     @Override
-    public void onPlayerQuit (PlayerEvent event) {
-        if (ModMode.mods.containsKey(event.getPlayer().getName())){}
-//            ModMode.mods.remove(event.getPlayer().getDisplayName());
+    public void onPlayerQuit (PlayerQuitEvent event) {
+        if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) {
+            ModMode.mods.remove(event.getPlayer().getDisplayName());
+        }
     }
     
     @Override
-    public void onPlayerJoin(PlayerEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         if (ModMode.mods.containsKey(event.getPlayer().getDisplayName())) { // Points to an unclean shutdown
             ModMode.mods.remove(event.getPlayer().getDisplayName());
-            modMode.restoreShit(event.getPlayer());
         }
     }
      
